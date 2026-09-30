@@ -6,7 +6,6 @@
 *.tfvars.json
 crash.log
 crash.*.log
-.terraform.lock.hcl
 
 # Ansible
 *.retry
