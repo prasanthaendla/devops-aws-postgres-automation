@@ -1,0 +1,27 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+crash.log
+crash.*.log
+.terraform.lock.hcl
+
+# Ansible
+*.retry
+
+# Secrets
+.env
+*.pem
+*.key
+
+# SSH
+.ssh/
+
+# VS Code
+.vscode/
+
+# OS
+Thumbs.db
+.DS_Store
