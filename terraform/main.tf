@@ -88,7 +88,7 @@ resource "aws_instance" "postgres" {
   subnet_id                   = var.subnet_id
   vpc_security_group_ids      = [aws_security_group.postgres.id]
   key_name                    = var.key_name
-  associate_public_ip_address = false
+  associate_public_ip_address = true
 
   root_block_device {
     volume_type = "gp3"

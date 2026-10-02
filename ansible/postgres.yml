@@ -1,0 +1,23 @@
+---
+- name: Configure PostgreSQL Server
+  hosts: postgres
+  become: true
+
+  tasks:
+    - name: Update apt package cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Install PostgreSQL
+      ansible.builtin.apt:
+        name:
+          - postgresql
+          - postgresql-contrib
+        state: present
+
+    - name: Ensure PostgreSQL service is running
+      ansible.builtin.service:
+        name: postgresql
+        state: started
+        enabled: true
