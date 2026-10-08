@@ -1,6 +1,13 @@
 terraform {
   required_version = ">= 1.6.0"
 
+  backend "s3" {
+    bucket       = "devops-aws-postgres-tfstate-418295691815"
+    key          = "devops-aws-postgres/terraform.tfstate"
+    region       = "ap-south-2"
+    use_lockfile = true
+  }
+
   required_providers {
     aws = {
       source = "hashicorp/aws"
@@ -14,12 +21,12 @@ provider "aws" {
 
 # Find the latest official Ubuntu 26.04 AMD64 image
 data "aws_ami" "ubuntu" {
-  most_recent = true
+  most_recent = false
   owners      = ["099720109477"]
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd-gp3/ubuntu-resolute-26.04-amd64-server-*"]
+    values = ["ubuntu/images/hvm-ssd-gp3/ubuntu-resolute-26.04-amd64-server-20260916"]
   }
 
   filter {
