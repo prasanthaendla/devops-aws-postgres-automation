@@ -30,3 +30,10 @@ variable "key_name" {
   type        = string
   default     = "jenkins"
 }
+
+
+variable "sre_instance_type" {
+  description = "Instance type for the SRE monitoring EC2"
+  type        = string
+  default     = "t3.small"
+}

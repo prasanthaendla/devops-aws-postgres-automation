@@ -108,3 +108,55 @@ resource "aws_instance" "postgres" {
     Role = "postgresql"
   }
 }
+
+
+# SRE monitoring server security group
+resource "aws_security_group" "sre" {
+  name        = "devops-sre-monitoring-sg"
+  description = "Security group for SRE monitoring EC2"
+  vpc_id      = var.vpc_id
+
+  # SSH access from Jenkins only
+  ingress {
+    description     = "SSH from Jenkins"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [var.jenkins_security_group_id]
+  }
+
+  # Allow outbound traffic for package installation
+  egress {
+    description = "Allow outbound traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "devops-sre-monitoring-sg"
+    Role = "sre-monitoring"
+  }
+}
+
+# Dedicated SRE monitoring EC2 instance
+resource "aws_instance" "sre_monitoring" {
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = var.sre_instance_type
+  subnet_id                   = var.subnet_id
+  vpc_security_group_ids      = [aws_security_group.sre.id]
+  key_name                    = var.key_name
+  associate_public_ip_address = true
+
+  root_block_device {
+    volume_type = "gp3"
+    volume_size = 20
+    encrypted   = true
+  }
+
+  tags = {
+    Name = "devops-sre-monitoring-server"
+    Role = "sre-monitoring"
+  }
+}
