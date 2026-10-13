@@ -84,6 +84,16 @@ resource "aws_security_group" "postgres" {
   }
 
 
+  ingress {
+    description     = "PostgreSQL exporter metrics from SRE monitoring server"
+    from_port       = 9187
+    to_port         = 9187
+    protocol        = "tcp"
+    security_groups = [aws_security_group.sre.id]
+  }
+
+
+
   # Outbound access for package installation and updates
   egress {
     description = "Allow outbound traffic"
