@@ -65,6 +65,7 @@ resource "aws_security_group" "postgres" {
     security_groups = [var.jenkins_security_group_id]
   }
 
+
   # PostgreSQL only from Jenkins
   ingress {
     description     = "PostgreSQL from Jenkins"
@@ -91,7 +92,6 @@ resource "aws_security_group" "postgres" {
     protocol        = "tcp"
     security_groups = [aws_security_group.sre.id]
   }
-
 
 
   # Outbound access for package installation and updates
@@ -143,6 +143,15 @@ resource "aws_security_group" "sre" {
     to_port         = 22
     protocol        = "tcp"
     security_groups = [var.jenkins_security_group_id]
+  }
+
+  # Grafana web access from my current public IP only
+  ingress {
+    description = "Grafana access"
+    from_port   = 3000
+    to_port     = 3000
+    protocol    = "tcp"
+    cidr_blocks = ["124.123.138.160/32"]
   }
 
   # Allow outbound traffic for package installation
