@@ -1,6 +1,14 @@
 pipeline {
     agent any
 
+    parameters {
+        booleanParam(
+            name: 'APPLY_TERRAFORM',
+            defaultValue: false,
+            description: 'Enable only when you intend to apply the reviewed Terraform plan.'
+        )
+    }
+
     environment {
         TF_VAR_aws_region                = 'ap-south-2'
         TF_VAR_vpc_id                    = 'vpc-09145eca91f7bd4fe'
@@ -50,20 +58,23 @@ pipeline {
             }
         }
 
-        stage('Approval Before Apply') {
-            steps {
-                input(
-                    message: 'Review the Terraform Plan console output. Approve only if the proposed AWS changes are correct.',
-                    ok: 'Approve Terraform Apply'
-                )
-            }
-        }
-
         stage('Terraform Apply') {
+            when {
+                expression { params.APPLY_TERRAFORM }
+            }
             steps {
                 dir('terraform') {
                     sh 'terraform apply -auto-approve tfplan'
                 }
+            }
+        }
+
+        stage('Apply Skipped') {
+            when {
+                expression { !params.APPLY_TERRAFORM }
+            }
+            steps {
+                echo 'APPLY_TERRAFORM is false. No infrastructure changes will be applied.'
             }
         }
     }
