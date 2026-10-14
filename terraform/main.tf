@@ -185,7 +185,8 @@ resource "aws_instance" "sre_monitoring" {
   }
 
   tags = {
-    Name = "devops-sre-monitoring-server"
-    Role = "sre-monitoring"
+    Name        = "devops-sre-monitoring-server"
+    Role        = "sre-monitoring"
+    Environment = "lab"
   }
 }
