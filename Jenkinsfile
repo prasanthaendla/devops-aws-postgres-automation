@@ -19,10 +19,10 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/prasanthaendla/devops-aws-postgres-automation.git'
+                checkout scm
             }
         }
 
@@ -30,6 +30,8 @@ pipeline {
             steps {
                 sh 'pwd'
                 sh 'git status'
+                sh 'git branch --show-current'
+                sh 'git log -1 --oneline'
                 sh 'find . -maxdepth 2 -type f | sort'
             }
         }
